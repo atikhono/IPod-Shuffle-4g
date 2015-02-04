@@ -473,7 +473,7 @@ class Shuffler(object):
             if "ipod_control/speakable" not in dirpath.lower() and "/." not in dirpath.lower():
                 for filename in sorted(filenames, key = lambda x: x.lower()):
                     fullPath = os.path.abspath(os.path.join(dirpath, filename))
-                    relPath = fullPath[fullPath.index(self.path)+len(self.path)+1:].lower()
+                    relPath = os.path.relpath(fullPath, self.path).lower()
                     fullPath = os.path.abspath(os.path.join(self.path, relPath));
                     if os.path.splitext(filename)[1].lower() in (".mp3", ".m4a", ".m4b", ".m4p", ".aa", ".wav"):
                         self.tracks.append(fullPath)
