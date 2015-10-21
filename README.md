@@ -8,7 +8,7 @@ Forked from the [shuffle-db-ng project](https://code.google.com/p/shuffle-db-ng/
 Just put your audio files into the mass storage of your IPod and shuffle.py will do the rest
 ```bash
 $ ./shuffle.py -h
-usage: shuffle [-h] [--disable-voiceover] [--rename-unicode]
+usage: shuffle [-h] [--enable-voiceover] [--rename-unicode]
                [--track-gain TRACK_GAIN] [--verbose]
                [path]
 
@@ -17,7 +17,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --disable-voiceover   Disable Voiceover Feature
+  --enable-voiceover    Enable Voiceover Feature
   --rename-unicode      Rename Files Causing Unicode Errors, will do minimal
                         required renaming
   --track-gain TRACK_GAIN
@@ -36,7 +36,8 @@ mp3 players.
 Allows to place shuffle.py into the iPod root directory permanently and run
 the script from there without specifying a path.
 
-* TODO: Disable VoiceOver by default.
+* VoiceOver disabled by default. Changed --disable-voiceover to
+--enable-voiceover.
 
 * TODO: Even with iTunesHelper disabled, iTunes still comes up everytime an
 iPod is connected thinking it is a virgin iPod.
@@ -78,7 +79,8 @@ References to the overlays above: [ikelos](http://git.overlays.gentoo.org/gitweb
 ##### Mac OS X (suprise-surprise!)
 Runs smoothly with VoiceOver feature disabled (who needs it anyway).
 ```bash
-./shuffle.py --disable-voiceover
+# master branch, latest revision
+./shuffle.py
 ```
 
 ##TODO

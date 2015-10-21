@@ -436,7 +436,7 @@ class Playlist(Record):
         return output + chunks
 
 class Shuffler(object):
-    def __init__(self, path, voiceover=True, rename=False, trackgain=0):
+    def __init__(self, path, voiceover=False, rename=False, trackgain=0):
         self.path, self.base = self.determine_base(path)
         self.tracks = []
         self.albums = []
@@ -538,7 +538,7 @@ if __name__ == '__main__':
     logging.basicConfig(format="%(levelname)s: %(message)s")
 
     parser = argparse.ArgumentParser(prog='shuffle')
-    parser.add_argument('--disable-voiceover', action='store_true', help='Disable Voiceover Feature')
+    parser.add_argument('--enable-voiceover', action='store_true', help='Enable Voiceover Feature')
     parser.add_argument('--rename-unicode', action='store_true', help='Rename Files Causing Unicode Errors, will do minimal required renaming')
     parser.add_argument('--track-gain', type=nonnegative_int, default=0, help='Store this volume gain (0-99) for all tracks; %(default)s (default) means no gain and is usually fine; e.g. 60 is very loud even on minimal player volume')
     parser.add_argument('--verbose', action='store_true')
@@ -551,7 +551,7 @@ if __name__ == '__main__':
     if result.rename_unicode:
         check_unicode(result.path)
 
-    shuffle = Shuffler(result.path, voiceover=not result.disable_voiceover, rename=result.rename_unicode, trackgain=result.track_gain)
+    shuffle = Shuffler(result.path, voiceover=result.enable_voiceover, rename=result.rename_unicode, trackgain=result.track_gain)
     shuffle.initialize()
     shuffle.populate()
     shuffle.write_database()
