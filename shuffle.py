@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
 import struct
@@ -14,6 +14,8 @@ import argparse
 import shutil
 import re
 import tempfile
+
+import logging
 
 audio_ext = (".mp3", ".m4a", ".m4b", ".m4p", ".aa", ".wav")
 list_ext = (".pls", ".m3u")
@@ -524,13 +526,27 @@ def nonnegative_int(string):
         raise argparse.ArgumentTypeError("Track gain value should be in range 0-99")
     return intval
 
+def ipod_root(path):
+    if not os.path.exists(path):
+        raise argparse.ArgumentTypeError("'%s' does not exist" % path)
+    if not os.path.exists(os.path.join(path, 'iPod_Control')):
+        logging.warning('iPod_Control/ not found in %s. Not an iPod root directory?', path)
+    return path
+
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    logging.basicConfig(format="%(levelname)s: %(message)s")
+
+    parser = argparse.ArgumentParser(prog='shuffle')
     parser.add_argument('--disable-voiceover', action='store_true', help='Disable Voiceover Feature')
     parser.add_argument('--rename-unicode', action='store_true', help='Rename Files Causing Unicode Errors, will do minimal required renaming')
-    parser.add_argument('--track-gain', type=nonnegative_int, default=0, help='Store this volume gain (0-99) for all tracks; 0 (default) means no gain and is usually fine; e.g. 60 is very loud even on minimal player volume')
-    parser.add_argument('path')
+    parser.add_argument('--track-gain', type=nonnegative_int, default=0, help='Store this volume gain (0-99) for all tracks; %(default)s (default) means no gain and is usually fine; e.g. 60 is very loud even on minimal player volume')
+    parser.add_argument('--verbose', action='store_true')
+    parser.add_argument('path', nargs='?', default=os.path.dirname(os.path.realpath(__file__)), type=ipod_root, help='iPod root/mountpoint. Default: script dirname')
     result = parser.parse_args()
+
+    if result.verbose:
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=DEBUG)
 
     if result.rename_unicode:
         check_unicode(result.path)
