@@ -72,7 +72,10 @@ class Text2Speech(object):
 
     @staticmethod
     def pico2wave(out_wav_path, unicodetext):
-        subprocess.call(["pico2wave", "-l", "en-GB", "-w", out_wav_path, unicodetext])
+        if sys.platform == "darwin":
+            subprocess.call(["say", "-o", out_wav_path, "--data-format=LEI16", unicodetext])
+        else:
+            subprocess.call(["pico2wave", "-l", "en-GB", "-w", out_wav_path, unicodetext])
 
     @staticmethod
     def rhvoice(out_wav_path, unicodetext):
@@ -470,6 +473,7 @@ class Shuffler(object):
     def populate(self):
         self.tunessd = TunesSD(self)
         for (dirpath, dirnames, filenames) in os.walk(self.path):
+            filenames = [f for f in filenames if not f[0] == '.']
             dirnames.sort()
             # Ignore the speakable directory and any hidden directories
             if "ipod_control/speakable" not in dirpath.lower() and "/." not in dirpath.lower():
